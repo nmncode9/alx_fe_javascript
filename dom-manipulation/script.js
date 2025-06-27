@@ -1,5 +1,5 @@
 const quote = document.querySelector("#quoteDisplay");
-const generateButton = document.querySelector("#newQuote");
+const generateButton = document.getElementById("newQuote");
 
 const createQuote = document.querySelector("#newQuoteText");
 const createCategory = document.querySelector("#newQuoteCategory");
