@@ -32,7 +32,9 @@ function createAddQuoteForm(text, category) {
 }
 
 function newQuote() {
-    quote.textContent = showRandomQuote();
+    const paraQuote = document.createElement("p");
+    quote.appendChild(paraQuote);
+    quote.innerHTML = `${showRandomQuote()}`;
 }
 
 function addQuote() {
