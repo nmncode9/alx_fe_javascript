@@ -49,6 +49,6 @@ function addQuote() {
     }
 }
 
-
+generateButton.addEventListener("click", newQuote);
 
 
