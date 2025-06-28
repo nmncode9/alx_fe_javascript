@@ -55,7 +55,7 @@ function updateExportURL() {
     var blob = new Blob(
         [JSON.stringify(quoteList),],
         {
-            type : "text/plain;charset=utf-8"
+            type : "application/json;charset=utf-8"
         }
     );
 
