@@ -29,6 +29,9 @@ function showRandomQuote() {
 
 function createAddQuoteForm(text, category) {
     quoteList.push({text: text, category: category})
+    localStorage.setItem("quoteList", JSON.stringify(quoteList));
+    createQuote.value = "";
+    createCategory.value = "";
 }
 
 function newQuote() {
@@ -38,16 +41,15 @@ function newQuote() {
 }
 
 function addQuote() {
-    tempQuote = createQuote.value.trim();
-    tempCat = createCategory.value.trim();
-    if (!tempQuote || !tempCat){
+    const quote = createQuote.value.trim();
+    const category = createCategory.value.trim();
+
+    if (!quote || !category){
         alert("Please ensure you have filled all the fields.");
-    } else {
-        quoteList.push({text: tempQuote, category: tempCat})
-        localStorage.setItem("quoteList", JSON.stringify(quoteList));
-        createQuote.value = "";
-        createCategory.value = "";
+        return;
     }
+    
+    createAddQuoteForm(quote, category);
 }
 
 function updateExportURL() {
