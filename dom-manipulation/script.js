@@ -50,6 +50,33 @@ function addQuote() {
     }
 }
 
+function updateExportURL() {
+
+    var blob = new Blob(
+        [JSON.stringify(quoteList),],
+        {
+            type : "text/plain;charset=utf-8"
+        }
+    );
+
+    exportURL = URL.createObjectURL(blob);
+    document.getElementById("export").setAttribute("href", exportURL)
+
+}
+
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+        const importedQuotes = JSON.parse(event.target.result);
+        quoteList.push(...importedQuotes);
+        localStorage.setItem("quoteList", JSON.stringify(quoteList));
+        alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+}
+
+document.addEventListener("DOMContentLoaded", updateExportURL)
+
 generateButton.addEventListener("click", newQuote);
 
 
