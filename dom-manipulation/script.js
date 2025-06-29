@@ -4,6 +4,8 @@ const generateButton = document.getElementById("newQuote");
 const createQuote = document.querySelector("#newQuoteText");
 const createCategory = document.querySelector("#newQuoteCategory");
 
+const categoryFilter = document.getElementById("categoryFilter");
+
 let quoteList = JSON.parse(localStorage.getItem("quoteList")) || [
             {
                 text: "People who think they know everything are a great annoyance to those of us who do.",
@@ -19,7 +21,9 @@ let quoteList = JSON.parse(localStorage.getItem("quoteList")) || [
             },
         ];
 
-function random(n) {
+let categories = [];
+
+        function random(n) {
     return Math.floor((Math.random() * n));
 }
 
@@ -77,7 +81,25 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
-document.addEventListener("DOMContentLoaded", updateExportURL)
+function populateCategories() {
+
+    let catOption = quoteList
+        .map(quote => quote.category)
+        .filter((category, index, self) => self.indexOf(category) === index)
+        .map(category => {
+            const option = document.createElement("option");
+            option.textContent = category;
+            return option;
+        });
+
+    catOption.forEach(category => categoryFilter.appendChild(category));
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateExportURL();
+    populateCategories()
+})
 
 generateButton.addEventListener("click", newQuote);
 
