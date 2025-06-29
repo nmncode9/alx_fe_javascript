@@ -118,7 +118,8 @@ function filterQuotes() {
 
 document.addEventListener("DOMContentLoaded", () => {
     updateExportURL();
-    populateCategories()
+    populateCategories();
+    initializeSync();
 })
 
 generateButton.addEventListener("click", () => {
@@ -126,7 +127,90 @@ generateButton.addEventListener("click", () => {
     const filtered = filterQuotes();
     const randomQuote = filtered[random(filtered.length)];
     quote.innerHTML = `<p> ${randomQuote.text}</p>`;
-
 });
+
+
+// API URL
+// const URL = "https://mocki.io/v1/70b7c0d2-cec0-462c-89c9-fe88db1d9963"
+
+// ==========================
+// Server Sync Functions Start
+// ==========================
+
+const API_URL = "https://mocki.io/v1/70b7c0d2-cec0-462c-89c9-fe88db1d9963"; 
+
+// Fetch quotes from server (GET)
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Failed to fetch from server");
+        const data = await response.json();
+        return data; // expecting an array of { text, category }
+    } catch (error) {
+        console.error("Error fetching quotes from server:", error);
+        return [];
+    }
+}
+
+// Post a new quote to the server (POST)
+async function postQuoteToServer(quoteObj) {
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quoteObj),
+        });
+        if (!response.ok) throw new Error("Failed to post quote to server");
+        const data = await response.json();
+        return data; // expecting server’s saved quote response
+    } catch (error) {
+        console.error("Error posting quote to server:", error);
+        return null;
+    }
+}
+
+// Compare local and server quotes, update local storage and UI if needed
+async function syncLocalWithServer() {
+    const serverQuotes = await fetchQuotesFromServer();
+
+    if (serverQuotes.length === 0) {
+        console.log("No quotes fetched from server, skipping sync.");
+        return;
+    }
+
+    // Conflict resolution strategy: server data takes precedence
+    // Update local quotes if server has newer or different quotes
+    // Simple approach: replace local storage with server data for now
+    // (In real apps, you'd do more fine-grained merging)
+
+    // Check if local and server quotes differ by length or content
+    const localStr = JSON.stringify(quoteList);
+    const serverStr = JSON.stringify(serverQuotes);
+
+    if (localStr !== serverStr) {
+        console.log("Syncing local data with server...");
+        quoteList = serverQuotes;
+        localStorage.setItem("quoteList", JSON.stringify(quoteList));
+        populateCategories();
+        // Optionally update displayed quote or UI here if needed
+    } else {
+        console.log("Local data already in sync with server.");
+    }
+}
+
+// Initialize periodic syncing every X milliseconds 
+function initializeSync(intervalMs = 300_000) { // 300 000ms = 5 minutes = 5 * 60 * 100
+    // Initial sync on page load
+    syncLocalWithServer();
+
+    // Periodic sync every intervalMs
+    setInterval(() => {
+        syncLocalWithServer();
+    }, intervalMs);
+}
+
+// ========================
+// Server Sync Functions End
+// ========================
 
 
