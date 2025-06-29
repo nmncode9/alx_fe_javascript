@@ -137,7 +137,7 @@ generateButton.addEventListener("click", () => {
 // Server Sync Functions Start
 // ==========================
 
-const API_URL = "https://mocki.io/v1/70b7c0d2-cec0-462c-89c9-fe88db1d9963"; 
+const API_URL = "https://jsonplaceholder.typicode.com/posts"; 
 
 // Fetch quotes from server (GET)
 async function fetchQuotesFromServer() {
