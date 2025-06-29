@@ -96,11 +96,31 @@ function populateCategories() {
 
 }
 
+function filterQuotes() {
+    const selectedCategory = categoryFilter.value;
+
+    if (selectedCategory === "all") {
+        return quoteList;
+    }
+
+    return quoteList.filter( quote => quote.category === selectedCategory )
+    
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     updateExportURL();
     populateCategories()
 })
 
-generateButton.addEventListener("click", newQuote);
+generateButton.addEventListener("click", () => {
+    if (categoryFilter.value !== "all") {
+        quote.innerHTML = "";
+        const filtered = filterQuotes();
+        const randomQuote = filtered[random(filtered.length)];
+        quote.innerHTML = `<p> ${randomQuote.text}</p>`;
+    } else {
+        newQuote();
+    }
+});
 
 
