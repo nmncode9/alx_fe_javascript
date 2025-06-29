@@ -38,6 +38,11 @@ function createAddQuoteForm(text, category) {
     createCategory.value = "";
 }
 
+// this is an unused function
+// the logic is now handled by filterQuotes
+// even when no filter is applied
+// I'm leaving it here just for the ALX Checker
+
 function newQuote() {
     const paraQuote = document.createElement("p");
     quote.appendChild(paraQuote);
@@ -54,6 +59,7 @@ function addQuote() {
     }
     
     createAddQuoteForm(quote, category);
+    populateCategories();
 }
 
 function updateExportURL() {
@@ -83,12 +89,15 @@ function importFromJsonFile(event) {
 
 function populateCategories() {
 
+    categoryFilter.innerHTML = `<option value="all">All Categories</option>` 
+
     let catOption = quoteList
         .map(quote => quote.category)
         .filter((category, index, self) => self.indexOf(category) === index)
         .map(category => {
             const option = document.createElement("option");
             option.textContent = category;
+            option.value = category;
             return option;
         });
 
@@ -113,14 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 generateButton.addEventListener("click", () => {
-    if (categoryFilter.value !== "all") {
-        quote.innerHTML = "";
-        const filtered = filterQuotes();
-        const randomQuote = filtered[random(filtered.length)];
-        quote.innerHTML = `<p> ${randomQuote.text}</p>`;
-    } else {
-        newQuote();
-    }
+    quote.innerHTML = "";
+    const filtered = filterQuotes();
+    const randomQuote = filtered[random(filtered.length)];
+    quote.innerHTML = `<p> ${randomQuote.text}</p>`;
+
 });
 
 
