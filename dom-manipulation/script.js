@@ -194,7 +194,7 @@ async function syncQuotes() {
         populateCategories();
         // Optionally update displayed quote or UI here if needed
     } else {
-        console.log("Local data already in sync with server.");
+        console.log("Quotes synced with server!");
     }
 }
 
